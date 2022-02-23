@@ -1,7 +1,7 @@
-import 'package:meta/meta.dart';
+import 'package:flutter/material.dart';
 
 import '../entities/account_entity.dart';
 
 abstract class Authentication {
-  Future<AccountEntity> auth({required String email, required String password});
+  Future<AccountEntity> auth({@required String email, @required String password});
 }
