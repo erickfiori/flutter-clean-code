@@ -10,28 +10,28 @@ import 'package:fordev/domain/usecases/usecases.dart';
 class HttpClientSpy extends Mock implements HttpClient {}
 
 void main() {
+  RemoteAuthentication sut;
   HttpClientSpy httpClient;
   String url;
-  RemoteAuthentication sut;
-  AuthenticationParams params;
+  AuthenticationParams authenticationParams;
 
   setUp(() {
-    sut = RemoteAuthentication(httpClient: httpClient, url: url);
     httpClient = HttpClientSpy();
     url = faker.internet.httpUrl();
-    params = AuthenticationParams(email: faker.internet.email(), password: faker.internet.password());
+    sut = RemoteAuthentication(httpClient: httpClient, url: url);
+    authenticationParams = AuthenticationParams(email: faker.internet.email(), password: faker.internet.password());
   });
 
   //? Triple A - Arrange, Act, Assert
 
   test("Should call HttpClient with correct values", () async {
-    await sut.auth(params);
+    await sut.auth(authenticationParams);
 
     verify(
       httpClient.request(
         url: url,
         method: 'post',
-        body: {'email': params.email, 'password': params.password},
+        body: {'email': authenticationParams.email, 'password': authenticationParams.password},
       ),
     );
   });
@@ -43,21 +43,7 @@ void main() {
       HttpError.badRequest,
     );
 
-    final params = AuthenticationParams(email: faker.internet.email(), password: faker.internet.password());
-    final future = sut.auth(params);
-
-    expect(future, throwsA(DomainError.unexpected));
-  });
-
-  test("Should throw UnexpectedError if HttpClient returns 404", () async {
-    when(
-      httpClient.request(url: anyNamed('url'), method: anyNamed('method'), body: anyNamed('body')),
-    ).thenThrow(
-      HttpError.notFound,
-    );
-
-    final params = AuthenticationParams(email: faker.internet.email(), password: faker.internet.password());
-    final future = sut.auth(params);
+    final future = sut.auth(authenticationParams);
 
     expect(future, throwsA(DomainError.unexpected));
   });
