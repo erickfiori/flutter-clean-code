@@ -10,27 +10,28 @@ import 'package:fordev/domain/usecases/usecases.dart';
 class HttpClientSpy extends Mock implements HttpClient {}
 
 void main() {
+  RemoteAuthentication sut;
   HttpClientSpy httpClient;
   String url;
-  RemoteAuthentication sut;
+  AuthenticationParams authenticationParams;
 
   setUp(() {
     httpClient = HttpClientSpy();
     url = faker.internet.httpUrl();
     sut = RemoteAuthentication(httpClient: httpClient, url: url);
+    authenticationParams = AuthenticationParams(email: faker.internet.email(), password: faker.internet.password());
   });
 
   //? Triple A - Arrange, Act, Assert
 
   test("Should call HttpClient with correct values", () async {
-    final params = AuthenticationParams(email: faker.internet.email(), password: faker.internet.password());
-    await sut.auth(params);
+    await sut.auth(authenticationParams);
 
     verify(
       httpClient.request(
         url: url,
         method: 'post',
-        body: {'email': params.email, 'password': params.password},
+        body: {'email': authenticationParams.email, 'password': authenticationParams.password},
       ),
     );
   });
@@ -42,8 +43,7 @@ void main() {
       HttpError.badRequest,
     );
 
-    final params = AuthenticationParams(email: faker.internet.email(), password: faker.internet.password());
-    final future = sut.auth(params);
+    final future = sut.auth(authenticationParams);
 
     expect(future, throwsA(DomainError.unexpected));
   });
