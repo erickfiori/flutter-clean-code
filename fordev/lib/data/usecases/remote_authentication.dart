@@ -9,7 +9,25 @@ class RemoteAuthentication {
 
   RemoteAuthentication({@required this.httpClient, @required this.url});
 
-  Future<void> auth(AuthenticationParams params) async {
-    await httpClient.request(url: url, method: 'post', body: params.toJson());
+  Future<void> auth(AuthenticationParams authenticationParams) async {
+    final body = RemoteAuthenticationParams.fromDomain(authenticationParams).toJson();
+
+    await httpClient.request(url: url, method: 'post', body: body);
   }
+}
+
+class RemoteAuthenticationParams {
+  final String email;
+  final String password;
+
+  RemoteAuthenticationParams({
+    @required this.email,
+    @required this.password,
+  });
+
+  factory RemoteAuthenticationParams.fromDomain(AuthenticationParams authenticationParams) {
+    return RemoteAuthenticationParams(email: authenticationParams.email, password: authenticationParams.password);
+  }
+
+  Map toJson() => {'email': email, 'password': password};
 }
