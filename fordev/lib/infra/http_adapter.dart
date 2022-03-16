@@ -15,6 +15,22 @@ class HttpAdapter implements HttpClient {
     final jsonBody = body != null ? jsonEncode(body) : null;
 
     final response = await client.post(Uri.parse(url), headers: headers, body: jsonBody);
-    return response.body.isNotEmpty ? jsonDecode(response.body) : null;
+
+    switch (response.statusCode) {
+      case 200:
+        return response.body.isNotEmpty ? jsonDecode(response.body) : null;
+      case 204:
+        return null;
+      case 400:
+        throw HttpError.badRequest;
+      case 401:
+        throw HttpError.unauthorized;
+      case 403:
+        throw HttpError.forbidden;
+      case 404:
+        throw HttpError.notFound;
+      default:
+        throw HttpError.serverError;
+    }
   }
 }
