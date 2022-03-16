@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -36,6 +38,12 @@ void main() {
 
         verify(client.post(Uri.parse(url), headers: headers));
       });
+
+      test('Should call Post with correct Body', () async {
+        await sut.request(url: url, method: 'post', body: {'any_key': 'any_value'});
+
+        verify(client.post(Uri.parse(url), headers: headers, body: '{"any_key":"any_value"}'));
+      });
     },
   );
 }
@@ -48,6 +56,6 @@ class HttpAdapter {
   Future<void> request({@required String url, @required String method, Map body}) async {
     final headers = {'content-type': 'application/json', 'accept': 'application/json'};
 
-    await client.post(Uri.parse(url), headers: headers);
+    await client.post(Uri.parse(url), headers: headers, body: jsonEncode(body));
   }
 }
