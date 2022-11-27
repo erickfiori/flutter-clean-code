@@ -5,23 +5,37 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Flutter: Run all Tests",
-            "type": "dart",
-            "request": "launch",
-            "program": "./test/"
-        },
-        {
-            "name": "fordev",
-            "cwd": "fordev",
+            "name": "for_dev",
+            "cwd": "for_dev",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "fordev (profile mode)",
-            "cwd": "fordev",
+            "name": "for_dev (debug mode)",
+            "cwd": "for_dev",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug"
+        },
+        {
+            "name": "for_dev (profile mode)",
+            "cwd": "for_dev",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
+        },
+        {
+            "name": "for_dev (release mode)",
+            "cwd": "for_dev",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "For Dev: Run all Tests",
+            "type": "dart",
+            "request": "launch",
+            "program": "./for_dev/test/"
         }
     ]
 }
