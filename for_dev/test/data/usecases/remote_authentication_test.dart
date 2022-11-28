@@ -27,6 +27,6 @@ void main() {
 
     await sut.auth(authenticationParams: authenticationParams);
 
-    verify(httpClient.request(url: url, method: 'post', body: {"email": authenticationParams.email, "secret": authenticationParams.secret}));
+    verify(httpClient.request(url: url, method: 'post', body: {"email": authenticationParams.email, "password": authenticationParams.secret}));
   });
 }
