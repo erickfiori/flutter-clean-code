@@ -1,5 +1,8 @@
 import 'package:faker/faker.dart';
-import 'package:for_dev/domain/usecases/authentication.dart';
+import 'package:for_dev/data/http/http.dart';
+import 'package:for_dev/data/usecases/usecases.dart';
+import 'package:for_dev/domain/usecases/usecases.dart';
+
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
 import 'package:test/test.dart';
@@ -26,27 +29,4 @@ void main() {
 
     verify(httpClient.request(url: url, method: 'post', body: {"email": authenticationParams.email, "secret": authenticationParams.secret}));
   });
-}
-
-abstract class HttpClient {
-  Future<void> request({
-    required String url,
-    required String method,
-    Map<String, dynamic> body,
-  });
-}
-
-class RemoteAuthentication {
-  final HttpClient httpClient;
-  final String url;
-
-  RemoteAuthentication({required this.httpClient, required this.url});
-
-  Future<void> auth({required AuthenticationParams authenticationParams}) async {
-    await httpClient.request(
-      url: url,
-      method: 'post',
-      body: {"email": authenticationParams.email, "secret": authenticationParams.secret},
-    );
-  }
 }
