@@ -1,5 +1,6 @@
 # Flutter Clean Code Application
-from Rodrigo Manguinhos Clean Code Arch & S.O.L.I.D Principles course
+Flutter, TDD, Clean Architecture, SOLID e Design Patterns - Rodrigo Manguinhos Course (https://www.udemy.com/course/flutter-com-mango/)
 
-## Refactoring Project to Flutter/Dart latest version with Null-Safety
-   Work in Progress
+
+## Personal Goals 
+- Refactor Project to Flutter/Dart latest version with Null-Safety (Work in Progress)
