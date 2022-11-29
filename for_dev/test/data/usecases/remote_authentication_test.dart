@@ -1,6 +1,7 @@
 import 'package:faker/faker.dart';
 import 'package:for_dev/data/http/http.dart';
 import 'package:for_dev/data/usecases/usecases.dart';
+import 'package:for_dev/domain/errors/errors.dart';
 import 'package:for_dev/domain/usecases/usecases.dart';
 
 import 'package:mockito/mockito.dart';
@@ -11,13 +12,14 @@ import 'package:test/test.dart';
 import './remote_authentication_test.mocks.dart';
 
 void main() {
-  late final HttpClient httpClient;
+  //? Mockito Null Safety - Use Mocked Class instead Base Class
+  MockHttpClient httpClient = MockHttpClient();
+
   late final String url;
   late final RemoteAuthentication sut;
   late final AuthenticationParams authenticationParams;
 
   setUp(() {
-    httpClient = MockHttpClient();
     url = faker.internet.httpUrl();
     sut = RemoteAuthentication(httpClient: httpClient, url: url);
     authenticationParams = AuthenticationParams(email: faker.internet.email(), secret: faker.internet.password());
@@ -28,5 +30,15 @@ void main() {
     await sut.auth(authenticationParams: authenticationParams);
 
     verify(httpClient.request(url: url, method: 'post', body: {"email": authenticationParams.email, "password": authenticationParams.secret}));
+  });
+
+  test("Should throw UnexpectedError if HttpClient returns 400", () async {
+    //? Triple A - Arrange, Act, Expect
+
+    when(httpClient.request(url: anyNamed('url'), method: anyNamed('method'), body: anyNamed('body'))).thenThrow(HttpError.badRequest);
+
+    final future = sut.auth(authenticationParams: authenticationParams);
+
+    expect(future, throwsA(DomainError.unexpected));
   });
 }
