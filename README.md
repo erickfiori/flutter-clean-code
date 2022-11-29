@@ -1,6 +1,3 @@
-# flutter-clean-code
-
-
 # Flutter Clean Code Application
 from Rodrigo Manguinhos Clean Code Arch & S.O.L.I.D Principles course
 
